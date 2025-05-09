@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="PeasDashboard">
+        <div class="o_peas_dashboard">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="o_peas_card">
+                        <div class="o_peas_title">PEAS Users Summary</div>
+                        <div class="o_peas_metric"><t t-esc="dashboardData.total_peas_users"/></div>
+                        <div class="o_peas_label">Total Active PEAS Users</div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="o_peas_card">
+                        <div class="o_peas_title">Payment Summary</div>
+                        <div class="o_peas_metric"><t t-esc="dashboardData.total_payments"/></div>
+                        <div class="o_peas_label">Total Payments</div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt16">
+                <div class="col-md-12">
+                    <div class="o_peas_card">
+                        <div class="o_peas_title">Recent Payments</div>
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Reference</th>
+                                    <th>Employee</th>
+                                    <th>Date</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="dashboardData.recent_payments" t-as="payment">
+                                    <td><a href="#" class="o_peas_open_payment" t-att-data-id="payment.id"><t t-esc="payment.name"/></a></td>
+                                    <td><t t-esc="payment.employee_name"/></td>
+                                    <td><t t-esc="payment.payment_date"/></td>
+                                    <td><t t-esc="payment.amount"/></td>
+                                    <td><t t-esc="payment.state"/></td>
+                                </tr> 
+                            </tbody>
+                        </table>
+                        <div class="text-center mt8">
+                            <button class="btn btn-primary o_peas_view_all">View All Payments</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="o_peas_card">
+                <div class="o_peas_title">PEAS User Management</div>
+                <p>Make sure all PEAS users are loaded in the dashboard.</p>
+                <div class="text-center mt8">
+                    <button class="btn btn-primary o_peas_load_users">Load PEAS Users</button>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree view: Only PEAS employees -->
+    <record id="view_peas_employee_tree" model="ir.ui.view">
+        <field name="name">peas.employee.tree</field>
+        <field name="model">hr.employee</field>
+        <field name="arch" type="xml">
+            <tree create="false" edit="false" delete="false">
+                <field name="name"/>
+                <field name="job_id"/>
+                <field name="department_id"/>
+                <field name="work_email"/>
+                <field name="work_phone"/>
+                <field name="company_id" invisible="1" groups="base.group_multi_company"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form view: Add smart button for advance payments -->
+<record id="view_peas_employee_form" model="ir.ui.view">
+  <field name="name">peas.employee.form</field>
+  <field name="model">hr.employee</field>
+  <field name="priority" eval="20"/>
+  <field name="arch" type="xml">
+ <form create="false" edit="false" delete="false">
+  <sheet>
+    <field name="is_peas" invisible="1"/> <!-- Add this line -->
+    <div class="oe_button_box" name="button_box">
+      <button name="action_view_advance_payments"
+              type="object"
+              class="oe_stat_button"
+              icon="fa-money"
+              invisible="not is_peas">
+        <field name="advance_payment_count" widget="statinfo"/>
+      </button>
+    </div>
+    <field name="image_128" widget="image"/>
+    <h1><field name="name"/></h1>
+    <group>
+      <field name="job_id"/>
+      <field name="department_id"/>
+      <field name="work_email"/>
+      <field name="work_phone"/>
+      <field name="company_id" invisible="1"/>
+    </group>
+  </sheet>
+</form>
+  </field>
+</record>
+
+    <!-- Action: Only PEAS employees -->
+    <record id="action_peas_employee" model="ir.actions.act_window">
+        <field name="name">PEAS Employees</field>
+        <field name="res_model">hr.employee</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('is_peas','=',True)]</field>
+        <field name="context">{'create': False}</field>
+    </record>
+
+    <!-- Menu -->
+    <menuitem id="menu_peas_dashboard_root" name="PEAS Dashboard" sequence="80"/>
+    <menuitem id="menu_peas_employees" name="PEAS Employees" parent="menu_peas_dashboard_root" action="action_peas_employee" sequence="1"/>
+</odoo>

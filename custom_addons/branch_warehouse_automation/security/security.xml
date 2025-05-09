@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Security rule to allow access to warehouses of all allowed companies -->
+    <record id="warehouse_multi_company_rule" model="ir.rule">
+        <field name="name">Warehouse Multi-Company Access</field>
+        <field name="model_id" ref="stock.model_stock_warehouse"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        <field name="global" eval="True"/>
+    </record>
+    
+    <!-- Security rule for warehouse locations to match warehouse access -->
+    <record id="stock_location_multi_company_rule" model="ir.rule">
+        <field name="name">Stock Location Multi-Company Access</field>
+        <field name="model_id" ref="stock.model_stock_location"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        <field name="global" eval="True"/>
+    </record>
+</odoo>

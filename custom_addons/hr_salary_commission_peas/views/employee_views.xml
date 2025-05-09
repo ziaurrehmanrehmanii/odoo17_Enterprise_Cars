@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Extend employee form view -->
+    <record id="view_employee_form_inherit_salary_peas" model="ir.ui.view">
+        <field name="name">hr.employee.form.inherit.salary.peas</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='hr_settings']" position="after">
+                <page string="Salary and Commission" name="salary_commission">
+                    <group>
+                        <group>
+                            <field name="salary_type"/>
+                            <field name="is_peas"/>
+                            <field name="commission_percentage" required="salary_type in ['commission', 'salary_commission']"/>
+                        </group>
+                        <group>
+                            <field name="vendor_partner_id" readonly="1" invisible="not is_peas"/>
+                            <field name="customer_partner_id" readonly="1" invisible="not is_peas"/>
+                            <div>
+                                <button 
+                                    name="action_pay_advance" 
+                                    string="Pay Advance" 
+                                    type="object" 
+                                    class="oe_highlight" 
+                                    invisible="not is_peas"/>
+                                <button 
+                                    name="generate_payslip" 
+                                    string="Generate Payslip" 
+                                    type="object" 
+                                    class="oe_highlight"/>
+                            </div>
+                        </group>
+                    </group>
+                    
+                    <field name="commission_history_ids" readonly="1" invisible="salary_type == 'salary'">
+                        <tree>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                            <field name="percentage"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+    
+    <!-- Advance Payment Wizard Form -->
+    <record id="view_hr_advance_payment_wizard_form" model="ir.ui.view">
+        <field name="name">hr.advance.payment.wizard.form</field>
+        <field name="model">hr.advance.payment.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Pay Advance">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="employee_id"/>
+                            <field name="company_id"/>
+                            <field name="amount"/>
+                        </group>
+                        <group>
+                            <field name="payment_date"/>
+                            <field name="journal_id"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_confirm_payment" string="Confirm" type="object" class="oe_highlight"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

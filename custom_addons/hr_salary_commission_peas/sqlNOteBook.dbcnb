@@ -1,0 +1,30 @@
+cells:
+  - kind: 2
+    languageId: sql
+    value: >-
+      ALTER TABLE res_partner
+
+      ADD COLUMN IF NOT EXISTS employee_id INTEGER;
+
+
+      ALTER TABLE res_partner
+
+      ADD COLUMN IF NOT EXISTS is_employee_vendor BOOLEAN DEFAULT FALSE;
+
+
+      ALTER TABLE res_partner
+
+      ADD COLUMN IF NOT EXISTS is_employee_customer BOOLEAN DEFAULT FALSE;
+
+
+      ALTER TABLE res_partner
+
+      ADD CONSTRAINT res_partner_employee_fk FOREIGN KEY (employee_id)
+      REFERENCES hr_employee (id) ON DELETE SET NULL;
+    metadata: {}
+metadata:
+  conn:
+    id: 95IxkbIjiEUiQx_XQSUU2
+    name: Odoo
+  database: odoo17
+  schema: public

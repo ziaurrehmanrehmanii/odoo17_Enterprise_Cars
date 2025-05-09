@@ -1,0 +1,64 @@
+/* Dashboard specific styles */
+.o_peas_dashboard {
+    padding: 16px;
+}
+
+.o_peas_dashboard .o_peas_card {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    margin-bottom: 16px;
+    padding: 16px;
+}
+
+.o_peas_dashboard .o_peas_title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 12px;
+    color: #4c4c4c;
+}
+
+.o_peas_dashboard .o_peas_metric {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.o_peas_dashboard .o_peas_label {
+    font-size: 14px;
+    color: #777;
+}
+
+.o_peas_header {
+    margin-bottom: 20px;
+}
+
+.o_peas_value {
+    font-size: 36px;
+    font-weight: 300;
+    color: #666666;
+    text-align: center;
+}
+
+/* Payment details styling */
+.o_peas_payment {
+    padding: 15px;
+}
+
+.o_peas_payment_header {
+    background-color: #f8f9fa;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.o_peas_payment_state_draft {
+    color: #17a2b8;
+}
+
+.o_peas_payment_state_posted {
+    color: #28a745;
+}
+
+.o_peas_payment_state_cancelled {
+    color: #dc3545;
+}

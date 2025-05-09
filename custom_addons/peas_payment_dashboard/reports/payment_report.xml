@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_peas_payment" model="ir.actions.report">
+        <field name="name">Payment Details</field>
+        <field name="model">peas.payment</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">peas_payment_dashboard.report_peas_payment</field>
+        <field name="report_file">peas_payment_dashboard.report_peas_payment</field>
+        <field name="binding_model_id" ref="model_peas_payment"/>
+        <field name="binding_type">report</field>
+    </record>
+    
+    <template id="report_peas_payment">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2>Payment Details</h2>
+                        <div class="row mt32 mb32">
+                            <div class="col-6">
+                                <strong>Employee:</strong> <span t-field="doc.employee_id.name"/>
+                                <br/>
+                                <strong>Payment Reference:</strong> <span t-field="doc.name"/>
+                                <br/>
+                                <strong>Payment Type:</strong> <span t-field="doc.payment_type"/>
+                            </div>
+                            <div class="col-6">
+                                <strong>Payment Date:</strong> <span t-field="doc.payment_date"/>
+                                <br/>
+                                <strong>Amount:</strong> <span t-field="doc.amount" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                                <br/>
+                                <strong>Status:</strong> <span t-field="doc.state"/>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-12">
+                                <h4>Description</h4>
+                                <p t-field="doc.description"/>
+                            </div>
+                        </div>
+                        
+                        <div class="row mt32">
+                            <div class="col-12">
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Payment Details</th>
+                                            <th class="text-right">Value</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Base Amount</td>
+                                            <td class="text-right">
+                                                <span t-field="doc.amount" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                                            </td>
+                                        </tr>
+                                        <!-- Add any additional calculated fields here -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <div class="row mt32">
+                            <div class="col-12 text-right">
+                                <strong>Total Amount:</strong>
+                                <span t-field="doc.amount" t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                            </div>
+                        </div>
+                    </div>
+                </t> 
+            </t>
+        </t>
+    </template>
+</odoo>
