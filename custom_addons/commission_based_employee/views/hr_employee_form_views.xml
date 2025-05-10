@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <!-- View hr.employee.form form -->
+  <record id="view_hr_employee_form_form_commission" model="ir.ui.view">
+    <field name="name">hr.employee.form.commission</field>
+    <field name="model">hr.employee</field>
+    <field name="inherit_id" ref="hr.view_employee_form"/>
+    <field name="arch" type="xml">
+
+      <field name="company_country_code" position="after">
+        <field name="structure_type"/>
+        <field name="commission_rate" placeholder="Commission Rate..." invisible="structure_type == 'salary_based'"/>
+      </field>
+      <xpath expr="//notebook" position="inside">
+        <page string="Commission History" invisible="structure_type == 'salary_based'">
+          <field name="commission_history">
+            <tree create="0" edit="0">
+              <field name="active_from" />
+              <field name="active_to" />
+              <field name="commission_rate" />
+            </tree>
+          </field>
+        </page>
+      </xpath>
+    </field>
+  </record>
+
+</odoo>

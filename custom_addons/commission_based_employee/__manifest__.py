@@ -6,9 +6,10 @@
     'author': '',
     'website': '',
     'category': '',
-    'depends': ['base', 'web'],
-    'data': [
-        
+    'depends': ['base', 'web', 'hr', 'hr_contract', 'hr_payroll', 'hr_payroll_account'],
+    "data": [
+        "security/ir.model.access.csv",
+        "views/hr_employee_form_views.xml",
     ],
     'assets': {
               'web.assets_backend': [
