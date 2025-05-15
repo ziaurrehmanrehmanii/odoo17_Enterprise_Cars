@@ -8,6 +8,7 @@
     'category': '',
     'depends': ['base', 'web', 'hr','account','sale_management','crm','stock','hr_expense','hr_payroll','purchase'],
     "data": [
+        "security/peas_employee_security.xml",
         "views/hr_employee_views.xml"
     ],
     'assets': {

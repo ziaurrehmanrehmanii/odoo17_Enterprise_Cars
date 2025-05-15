@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <!-- Security category definition -->
+    <record id="category_peas_employee" model="ir.module.category">
+        <field name="name">Peas Employee</field>
+        <field name="description">Security category for Peas Employee</field>
+        <field name="sequence">1</field>
+    </record>
+
+    <!-- 
+    PEAS Employee User Group - Base group for all PEAS employees
+    This includes base.group_user which is CRITICAL for login access
+    -->
+    <record id="group_peas_employee_user" model="res.groups">
+        <field name="name">Peas Employee</field>
+        <field name="category_id" ref="category_peas_employee"/>
+        <!-- Critical: base.group_user is required for basic access including reading own user record -->
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+</odoo>

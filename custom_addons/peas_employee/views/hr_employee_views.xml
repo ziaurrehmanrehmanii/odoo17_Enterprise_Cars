@@ -7,21 +7,23 @@
         <field name="model">hr.employee</field>
         <field name="inherit_id" ref="hr.view_employee_form"/>
         <field name="arch" type="xml">
-            <!-- Make work_email required based on is_peas_employee -->
-            <field name="work_email" position="attributes">
-                <attribute name="required">is_peas_employee == true</attribute>
+            <!-- Add is_peas_employee field at the very beginning -->
+            <field name="coach_id" position="after">
+                <field name="is_peas_employee" invisible="0"/>
             </field>
+
+            <!-- Make work_email required based on is_peas_employee -->
+            <field name="work_email" required="is_peas_employee" position="attributes"/>
+
 
             <!-- Add login field for PEAS employees when creating users -->
             <field name="coach_id" position="after">
-                <field name="is_peas_employee"/>
-                <field name="user_id" position="attributes" readonly="1" create="0" edit="0" invisible="is_peas_employee == false">
-                    <attribute name="required">is_peas_employee == true</attribute>
-                </field>
                 <!-- These fields are always readonly but only visible when is_peas_employee is true -->
-                <field name="vendor_id" readonly="1" create="0" edit="0" invisible="is_peas_employee == false"/>
-                <field name="customer_id" readonly="1" create="0" edit="0" invisible="is_peas_employee == false"/>
+                <field name="user_id" invisible="not is_peas_employee" readonly="1" create="0" edit="0"/>
+                <field name="vendor_id" readonly="1" create="0" edit="0" invisible="not is_peas_employee"/>
+                <field name="customer_id" readonly="1" create="0" edit="0" invisible="not is_peas_employee"/>
             </field>
+
         </field>
     </record>
 
