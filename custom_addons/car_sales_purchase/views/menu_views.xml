@@ -1,18 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Root Menu -->
-    <menuitem id="menu_car_sales_purchase_root" name="Cars" web_icon="car_sales_purchase,static/description/icon.png" sequence="10"/>
+    <!-- Main Menu -->
+    <menuitem id="menu_car_sales_purchase_root" name="Car Sales &amp; Purchase" web_icon="car_sales_purchase,static/description/icon.png" sequence="50" groups="base.group_user"/>
 
-    <!-- Main Submenus -->
-    <menuitem id="menu_car_sales_purchase_main" name="Dashboard" parent="menu_car_sales_purchase_root" sequence="1"/>
-    <menuitem id="menu_car_sales_purchase_vehicles" name="Vehicles" parent="menu_car_sales_purchase_root" sequence="10"/>
-    <menuitem id="menu_car_sales_purchase_sales" name="Sales" parent="menu_car_sales_purchase_root" sequence="20"/>
-    <menuitem id="menu_car_sales_purchase_purchase" name="Purchases" parent="menu_car_sales_purchase_root" sequence="30"/>
-    <menuitem id="menu_car_sales_purchase_config" name="Configuration" parent="menu_car_sales_purchase_root" sequence="100"/>
+    <!-- Dashboard Menu -->
+    <menuitem id="menu_car_sales_purchase_dashboard" name="Dashboard" parent="menu_car_sales_purchase_root" sequence="1"/>
 
-    <!-- Partners submenu under Cars -->
-    <menuitem id="menu_car_sales_purchase_partner" name="Car Customers" parent="menu_car_sales_purchase_root" action="base.action_partner_form" sequence="10"/>
+    <!-- Connections Menu -->
+    <menuitem id="menu_car_sales_purchase_connections" name="Connections" parent="menu_car_sales_purchase_root" sequence="10"/>
 
-    <!-- Products submenu using the product's action -->
-    <menuitem id="menu_car_sales_purchase_product" name="Car Products" parent="menu_car_sales_purchase_root" action="product.product_template_action_all" sequence="20"/>
+    <menuitem id="menu_car_connection" name="Connections" parent="menu_car_sales_purchase_connections" action="action_car_connection" sequence="1"/>
+
+    <!-- Cars Menu -->
+    <menuitem id="menu_car_sales_purchase_cars" name="Cars" parent="menu_car_sales_purchase_root" sequence="20"/>
+
+    <menuitem id="menu_car_details" name="All Cars" parent="menu_car_sales_purchase_cars" action="action_car_details" sequence="1"/>
+
+    <menuitem id="menu_car_buy" name="Buy Cars" parent="menu_car_sales_purchase_cars" action="action_car_buy" sequence="2"/>
+
+    <menuitem id="menu_car_sell" name="Sell Cars" parent="menu_car_sales_purchase_cars" action="action_car_sell" sequence="3"/>
+
+    <!-- Offers Menu -->
+    <menuitem id="menu_car_sales_purchase_offers" name="Offers" parent="menu_car_sales_purchase_root" sequence="30"/>
+
+    <menuitem id="menu_car_offer" name="Offers" parent="menu_car_sales_purchase_offers" action="action_car_offer" sequence="1"/>
+
+    <!-- Configuration Menu -->
+    <menuitem id="menu_car_sales_purchase_configuration" name="Configuration" parent="menu_car_sales_purchase_root" sequence="100"/>
 </odoo>

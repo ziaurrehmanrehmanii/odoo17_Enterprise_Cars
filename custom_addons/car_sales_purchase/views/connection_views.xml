@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Connection Tree View -->
+    <record id="view_car_connection_tree" model="ir.ui.view">
+        <field name="name">car.connection.tree</field>
+        <field name="model">car.connection</field>
+        <field name="arch" type="xml">
+            <tree string="Connections">
+                <field name="name"/>
+                <field name="email"/>
+                <field name="phone"/>
+                <field name="city"/>
+                <field name="car_count"/>
+                <field name="user_id" widget="many2one_avatar_user"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Connection Form View -->
+    <record id="view_car_connection_form" model="ir.ui.view">
+        <field name="name">car.connection.form</field>
+        <field name="model">car.connection</field>
+        <field name="arch" type="xml">
+            <form string="Connection">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_cars" type="object" class="oe_stat_button" icon="fa-car">
+                            <field name="car_count" widget="statinfo" string="Cars"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Connection Name"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="email"/>
+                            <field name="phone"/>
+                            <field name="mobile"/>
+                            <field name="user_id" widget="many2one_avatar_user"/>
+                        </group>
+                        <group>
+                            <field name="street"/>
+                            <field name="street2"/>
+                            <field name="city"/>
+                            <field name="state_id"/>
+                            <field name="zip"/>
+                            <field name="country_id" options="{'no_create': True}"/>
+                            <field name="company_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Buy Cars">
+                            <field name="buy_car_ids" context="{'default_transaction_type': 'buy', 'default_connection_id': id}">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="make"/>
+                                    <field name="model"/>
+                                    <field name="year"/>
+                                    <field name="condition"/>
+                                    <field name="asking_price"/>
+                                    <field name="state" decoration-info="state in ('draft','negotiation')" decoration-success="state == 'done'" decoration-warning="state == 'offer_accepted'" decoration-danger="state == 'cancelled'"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Sell Cars">
+                            <field name="sell_car_ids" context="{'default_transaction_type': 'sell', 'default_connection_id': id}">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="make"/>
+                                    <field name="model"/>
+                                    <field name="year"/>
+                                    <field name="condition"/>
+                                    <field name="asking_price"/>
+                                    <field name="state" decoration-info="state in ('draft','negotiation')" decoration-success="state == 'done'" decoration-warning="state == 'offer_accepted'" decoration-danger="state == 'cancelled'"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Notes">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Connection Kanban View -->
+    <record id="view_car_connection_kanban" model="ir.ui.view">
+        <field name="name">car.connection.kanban</field>
+        <field name="model">car.connection</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <field name="id"/>
+                <field name="name"/>
+                <field name="email"/>
+                <field name="phone"/>
+                <field name="city"/>
+                <field name="car_count"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_global_click">
+                            <div class="oe_kanban_details">
+                                <strong class="o_kanban_record_title">
+                                    <field name="name"/>
+                                </strong>
+                                <div t-if="record.email.value">
+                                    <field name="email"/>
+                                </div>
+                                <div t-if="record.phone.value">
+                                    <field name="phone"/>
+                                </div>
+                                <div t-if="record.city.value">
+                                    <field name="city"/>
+                                </div>
+                                <div>
+                                    <span class="badge rounded-pill text-bg-info">
+                                        <t t-esc="record.car_count.value"/>
+ Cars
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Connection Search View -->
+    <record id="view_car_connection_search" model="ir.ui.view">
+        <field name="name">car.connection.search</field>
+        <field name="model">car.connection</field>
+        <field name="arch" type="xml">
+            <search string="Connections">
+                <field name="name"/>
+                <field name="email"/>
+                <field name="phone"/>
+                <field name="city"/>
+                <field name="user_id"/>
+                <separator/>
+                <filter string="My Connections" name="my_connections" domain="[('user_id', '=', uid)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="User" name="user" context="{'group_by': 'user_id'}"/>
+                    <filter string="City" name="city" context="{'group_by': 'city'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Connection Action -->
+    <record id="action_car_connection" model="ir.actions.act_window">
+        <field name="name">Connections</field>
+        <field name="res_model">car.connection</field>
+        <field name="view_mode">tree,form,kanban</field>
+        <field name="context">{'search_default_my_connections': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first connection!
+            </p>
+        </field>
+    </record>
+</odoo>

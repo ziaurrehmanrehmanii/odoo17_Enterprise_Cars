@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_car_connection_user,car.connection.user,model_car_connection,car_sales_purchase.group_car_sales_purchase_user,1,1,1,0
+access_car_connection_manager,car.connection.manager,model_car_connection,car_sales_purchase.group_car_sales_purchase_manager,1,1,1,1
+access_car_details_user,car.details.user,model_car_details,car_sales_purchase.group_car_sales_purchase_user,1,1,1,0
+access_car_details_manager,car.details.manager,model_car_details,car_sales_purchase.group_car_sales_purchase_manager,1,1,1,1
+access_car_offer_user,car.offer.user,model_car_offer,car_sales_purchase.group_car_sales_purchase_user,1,1,1,0
+access_car_offer_manager,car.offer.manager,model_car_offer,car_sales_purchase.group_car_sales_purchase_manager,1,1,1,1

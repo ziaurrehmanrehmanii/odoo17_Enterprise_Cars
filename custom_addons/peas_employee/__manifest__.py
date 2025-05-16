@@ -18,7 +18,7 @@
                   'peas_employee/static/src/**/*'
               ],
           },
-    'application': True,
+    'application': False,
     'installable': True,
     'auto_install': False,
     'license': 'LGPL-3',

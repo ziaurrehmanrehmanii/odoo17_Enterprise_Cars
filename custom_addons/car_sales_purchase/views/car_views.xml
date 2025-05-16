@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Car Tree View -->
+    <record id="view_car_details_tree" model="ir.ui.view">
+        <field name="name">car.details.tree</field>
+        <field name="model">car.details</field>
+        <field name="arch" type="xml">
+            <tree string="Cars" decoration-info="state in ('draft','negotiation')" decoration-success="state == 'done'" decoration-warning="state in ('offer_accepted', 'invoiced')" decoration-danger="state == 'cancelled'">
+                <field name="transaction_type" optional="show"/>
+                <field name="connection_name"/>
+                <field name="make"/>
+                <field name="model"/>
+                <field name="year"/>
+                <field name="condition"/>
+                <field name="mileage" optional="show"/>
+                <field name="asking_price"/>
+                <field name="final_price" optional="show"/>
+                <field name="state"/>
+                <field name="user_id" widget="many2one_avatar_user" optional="show"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Car Form View -->
+    <record id="view_car_details_form" model="ir.ui.view">
+        <field name="name">car.details.form</field>
+        <field name="model">car.details</field>
+        <field name="arch" type="xml">
+            <form string="Car Details">
+                <header>
+                    <button name="action_set_to_negotiation" string="Start Negotiation" type="object" class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="action_create_offer" string="Create Offer" type="object" class="oe_highlight" invisible="state in ['invoiced', 'done', 'cancelled']"/>
+                    <button name="action_cancel" string="Cancel" type="object" invisible="state not in ['draft','negotiation']"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,negotiation,offer_accepted,invoiced,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_offers" type="object" class="oe_stat_button" icon="fa-list">
+                            <field name="offer_count" widget="statinfo" string="Offers"/>
+                        </button>
+                        <button name="%(account.action_move_out_invoice_type)d" type="action" class="oe_stat_button" icon="fa-file-text-o" invisible="not invoice_id">
+                            <field name="invoice_id" invisible="1"/>
+                            <span>Invoice</span>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Description"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Vehicle Information">
+                            <field name="make"/>
+                            <field name="model"/>
+                            <field name="year"/>
+                            <field name="color"/>
+                            <field name="condition"/>
+                            <field name="vin" string="VIN"/>
+                            <field name="mileage"/>
+                            <field name="fuel_type"/>
+                            <field name="transmission"/>
+                        </group>
+                        <group string="Transaction Details">
+                            <field name="transaction_type"/>
+                            <field name="connection_id" options="{'no_create': True}"/>
+                            <field name="user_id" widget="many2one_avatar_user"/>
+                            <field name="company_id" invisible="1"/>
+                            <field name="currency_id" options="{'no_create': True}" groups="base.group_multi_currency"/>
+                            <field name="asking_price"/>
+                            <field name="expected_price"/>
+                            <field name="final_price" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Offers" invisible="offer_count == 0">
+                            <field name="offer_ids" readonly="1">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="date"/>
+                                    <field name="price"/>
+                                    <field name="state" decoration-info="state == 'draft'" decoration-success="state == 'accepted'" decoration-warning="state == 'sent'" decoration-danger="state == 'rejected'"/>
+                                    <field name="user_id" widget="many2one_avatar_user"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Notes">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Car Kanban View -->
+    <record id="view_car_details_kanban" model="ir.ui.view">
+        <field name="name">car.details.kanban</field>
+        <field name="model">car.details</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <field name="id"/>
+                <field name="name"/>
+                <field name="make"/>
+                <field name="model"/>
+                <field name="year"/>
+                <field name="condition"/>
+                <field name="asking_price"/>
+                <field name="final_price"/>
+                <field name="state"/>
+                <field name="transaction_type"/>
+                <field name="connection_name"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_global_click">
+                            <div class="oe_kanban_content">
+                                <div>
+                                    <strong>
+                                        <field name="make"/>
+                                        <field name="model"/>
+                                        <field name="year"/>
+                                    </strong>
+                                </div>
+                                <div>
+                                    <span t-attf-class="badge rounded-pill #{record.transaction_type.raw_value == 'buy' ? 'text-bg-success' : 'text-bg-primary'}">
+                                        <t t-if="record.transaction_type.raw_value == 'buy'">Buying</t>
+                                        <t t-else="">Selling</t>
+                                    </span>
+                                    <span t-attf-class="badge rounded-pill text-bg-info">
+                                        <field name="condition"/>
+                                    </span>
+                                </div>
+                                <div>
+                                    <strong>Connection: </strong>
+                                    <field name="connection_name"/>
+                                </div>
+                                <div class="mt-2">
+                                    <strong>Asking: </strong>
+                                    <field name="asking_price" widget="monetary"/>
+                                </div>
+                                <div t-if="record.final_price.raw_value">
+                                    <strong>Final: </strong>
+                                    <field name="final_price" widget="monetary"/>
+                                </div>
+                                <div class="mt-2">
+                                    <span t-attf-class="badge rounded-pill #{
+                                        record.state.raw_value == 'draft' ? 'text-bg-secondary' : 
+                                        record.state.raw_value == 'negotiation' ? 'text-bg-info' : 
+                                        record.state.raw_value == 'offer_accepted' ? 'text-bg-warning' : 
+                                        record.state.raw_value == 'invoiced' ? 'text-bg-primary' : 
+                                        record.state.raw_value == 'done' ? 'text-bg-success' : 'text-bg-danger'}">
+                                        <field name="state"/>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Car Search View -->
+    <record id="view_car_details_search" model="ir.ui.view">
+        <field name="name">car.details.search</field>
+        <field name="model">car.details</field>
+        <field name="arch" type="xml">
+            <search string="Cars">
+                <field name="name"/>
+                <field name="make"/>
+                <field name="model"/>
+                <field name="year"/>
+                <field name="vin"/>
+                <field name="connection_id"/>
+                <field name="user_id"/>
+                <separator/>
+                <filter string="Buy" name="buy" domain="[('transaction_type', '=', 'buy')]"/>
+                <filter string="Sell" name="sell" domain="[('transaction_type', '=', 'sell')]"/>
+                <separator/>
+                <filter string="My Cars" name="my_cars" domain="[('user_id', '=', uid)]"/>
+                <separator/>
+                <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="In Negotiation" name="negotiation" domain="[('state', '=', 'negotiation')]"/>
+                <filter string="Offer Accepted" name="offer_accepted" domain="[('state', '=', 'offer_accepted')]"/>
+                <filter string="Invoiced" name="invoiced" domain="[('state', '=', 'invoiced')]"/>
+                <filter string="Done" name="done" domain="[('state', '=', 'done')]"/>
+                <filter string="Cancelled" name="cancelled" domain="[('state', '=', 'cancelled')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Transaction Type" name="group_by_transaction_type" context="{'group_by': 'transaction_type'}"/>
+                    <filter string="Connection" name="group_by_connection" context="{'group_by': 'connection_id'}"/>
+                    <filter string="Make" name="group_by_make" context="{'group_by': 'make'}"/>
+                    <filter string="Status" name="group_by_state" context="{'group_by': 'state'}"/>
+                    <filter string="User" name="group_by_user" context="{'group_by': 'user_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Cars Actions -->
+    <record id="action_car_details" model="ir.actions.act_window">
+        <field name="name">Cars</field>
+        <field name="res_model">car.details</field>
+        <field name="view_mode">tree,form,kanban</field>
+        <field name="context">{'search_default_my_cars': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first car!
+            </p>
+        </field>
+    </record>
+
+    <record id="action_car_buy" model="ir.actions.act_window">
+        <field name="name">Buy Cars</field>
+        <field name="res_model">car.details</field>
+        <field name="view_mode">tree,form,kanban</field>
+        <field name="context">{'default_transaction_type': 'buy', 'search_default_buy': 1, 'search_default_my_cars': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first car to buy!
+            </p>
+        </field>
+    </record>
+
+    <record id="action_car_sell" model="ir.actions.act_window">
+        <field name="name">Sell Cars</field>
+        <field name="res_model">car.details</field>
+        <field name="view_mode">tree,form,kanban</field>
+        <field name="context">{'default_transaction_type': 'sell', 'search_default_sell': 1, 'search_default_my_cars': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first car to sell!
+            </p>
+        </field>
+    </record>
+</odoo>
