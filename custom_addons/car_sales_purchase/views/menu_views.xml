@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Root Menu -->
+    <menuitem id="menu_car_sales_purchase_root" name="Cars" web_icon="car_sales_purchase,static/description/icon.png" sequence="10"/>
+
+    <!-- Main Submenus -->
+    <menuitem id="menu_car_sales_purchase_main" name="Dashboard" parent="menu_car_sales_purchase_root" sequence="1"/>
+    <menuitem id="menu_car_sales_purchase_vehicles" name="Vehicles" parent="menu_car_sales_purchase_root" sequence="10"/>
+    <menuitem id="menu_car_sales_purchase_sales" name="Sales" parent="menu_car_sales_purchase_root" sequence="20"/>
+    <menuitem id="menu_car_sales_purchase_purchase" name="Purchases" parent="menu_car_sales_purchase_root" sequence="30"/>
+    <menuitem id="menu_car_sales_purchase_config" name="Configuration" parent="menu_car_sales_purchase_root" sequence="100"/>
+
+    <!-- Partners submenu under Cars -->
+    <menuitem id="menu_car_sales_purchase_partner" name="Car Customers" parent="menu_car_sales_purchase_root" action="base.action_partner_form" sequence="10"/>
+
+    <!-- Products submenu using the product's action -->
+    <menuitem id="menu_car_sales_purchase_product" name="Car Products" parent="menu_car_sales_purchase_root" action="product.product_template_action_all" sequence="20"/>
+</odoo>

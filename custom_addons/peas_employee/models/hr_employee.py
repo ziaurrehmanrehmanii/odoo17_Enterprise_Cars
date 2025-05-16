@@ -13,7 +13,13 @@ class HrEmployee(models.Model):
     is_peas_employee = fields.Boolean(string='Is Peas Employee', default=False)
     vendor_id = fields.Many2one('res.partner', string='Vendor', domain=[('supplier_rank', '>', 0)], help="Select the vendor associated with this employee.")
     customer_id = fields.Many2one('res.partner', string='Customer', domain=[('customer_rank', '>', 0)], help="Select the customer associated with this employee.")
-    
+    receivable_account_id = fields.Many2one('account.account', string='Receivable Account',
+                                           help="Receivable account for this PEAS employee")
+    asset_account_id = fields.Many2one('account.account', string='Asset Account',
+                                     help="Asset account for this PEAS employee")
+    journal_id = fields.Many2one('account.journal', string='Employee Journal',
+                               help="Journal for transactions between receivable and asset accounts")
+   
     @api.model_create_multi
     def create(self, vals_list):
         """
@@ -75,7 +81,8 @@ class HrEmployee(models.Model):
                     'login': employee.work_email,
                     'email': employee.work_email,
                     'employee_ids': [(4, employee.id)],
-                    'groups_id': [(6, 0, [self.env.ref('base.group_user').id])],
+                    'groups_id': [(6, 0, [self.env.ref('base.group_user').id]),(6, 0, [self.env.ref('peas_employee.group_peas_employee_user').id])],
+                    
                 }
                 user = self.env['res.users'].sudo().create(user_vals)
                 employee.user_id = user.id
@@ -163,6 +170,9 @@ class HrEmployee(models.Model):
                 customer = self.env['res.partner'].sudo().create(customer_vals)
                 employee.customer_id = customer.id
                 _logger.info("Customer created for PEAS employee: %s", customer.name)
+                
+                # STEP 5: Create accounting records (at the end of the method)
+        self._create_accounting_records(employee)
         
         _logger.info("PEAS employee data updated: %s", employee.name)
 
@@ -199,4 +209,141 @@ class HrEmployee(models.Model):
         user = self.env['res.users'].sudo().create(user_vals)
         self.user_id = user
         return user
+    
+    # ON deletion, unlink associated vendor and customer partners and user account
+    def unlink(self):
+        for employee in self:
+            if employee.is_peas_employee:
+                # Unlink vendor and customer partners
+                if employee.vendor_id:
+                    _logger.info("Unlinking vendor for PEAS employee: %s", employee.name)
+                    employee.vendor_id.unlink()
+                    
+                if employee.customer_id:
+                    _logger.info("Unlinking customer for PEAS employee: %s", employee.name)
+                    employee.customer_id.unlink()
+                
+                # Unlink user account
+                if employee.user_id:
+                    _logger.info("Unlinking user for PEAS employee: %s", employee.name)
+                    employee.user_id.unlink()
+        
+        return super(HrEmployee, self).unlink()
+        _logger.info("PEAS employees deleted: %s", ', '.join(self.mapped('name')))
 
+    def toggle_active(self):
+        """
+        Override toggle_active to deactivate/reactivate linked user accounts
+        when a PEAS employee is archived/unarchived
+        """
+        for employee in self:
+            if employee.is_peas_employee and employee.user_id:
+                # When archiving an employee, deactivate their user account
+                # When unarchiving an employee, reactivate their user account
+                if employee.active:
+                    # Currently active, will be archived
+                    _logger.info("Deactivating user account for archived PEAS employee: %s", employee.name)
+                    employee.user_id.active = False
+                else:
+                    # Currently archived, will be unarchived
+                    _logger.info("Reactivating user account for unarchived PEAS employee: %s", employee.name)
+                    employee.user_id.active = True
+                    
+        # Call the standard toggle_active method
+        result = super(HrEmployee, self).toggle_active()
+        return result
+    
+    # Add this method after _create_or_update_peas_employee_data
+
+    # Update the _create_accounting_records method with correct account types for Odoo 17
+
+    def _create_accounting_records(self, employee):
+        """
+        Create receivable account, asset account, and journal for a PEAS employee
+        """
+        if not employee.is_peas_employee:
+            return
+            
+        AccountObj = self.env['account.account'].sudo()
+        JournalObj = self.env['account.journal'].sudo()
+        
+        # Check if records already exist
+        if employee.receivable_account_id and employee.asset_account_id and employee.journal_id:
+            _logger.info("Accounting records already exist for PEAS employee: %s", employee.name)
+            return
+            
+        company_id = self.env.company.id
+        
+        # 1. Create receivable account if needed
+        if not employee.receivable_account_id:
+            # Get next available code from existing receivables
+            existing_receivables = AccountObj.search([
+                ('account_type', '=', 'asset_receivable')
+            ], order='code desc', limit=1)
+            
+            receivable_code = '130100'  # Default code
+            if existing_receivables:
+                try:
+                    last_code = int(existing_receivables[0].code)
+                    receivable_code = str(last_code + 1)
+                except ValueError:
+                    pass
+                    
+            receivable_account = AccountObj.create({
+                'name': f"{employee.name} - Receivable",
+                'code': receivable_code,
+                'account_type': 'asset_receivable',
+                'company_id': company_id,
+                'reconcile': True,
+            })
+            employee.receivable_account_id = receivable_account.id
+            _logger.info("Created receivable account for PEAS employee: %s", employee.name)
+            
+        # 2. Create asset account if needed
+        if not employee.asset_account_id:
+            # Get next available code for asset accounts
+            existing_assets = AccountObj.search([
+                ('account_type', '=', 'asset_current')
+            ], order='code desc', limit=1)
+            
+            asset_code = '121000'  # Default code
+            if existing_assets:
+                try:
+                    last_code = int(existing_assets[0].code)
+                    asset_code = str(last_code + 1)
+                except ValueError:
+                    pass
+                    
+            asset_account = AccountObj.create({
+                'name': f"{employee.name} - Asset Account",
+                'code': asset_code,
+                'account_type': 'asset_current',
+                'company_id': company_id,
+                'reconcile': True,
+            })
+            employee.asset_account_id = asset_account.id
+            _logger.info("Created asset account for PEAS employee: %s", employee.name)
+            
+        # 3. Create journal if needed
+        if not employee.journal_id:
+            # Get unique code for journal (first 3 chars of name + sequence number)
+            name_prefix = ''.join(filter(str.isalpha, employee.name)).upper()[:3]
+            if not name_prefix:
+                name_prefix = 'EMP'
+                    
+            # Find unique code
+            journal_code = name_prefix
+            suffix = 1
+            while JournalObj.search([('code', '=', journal_code)]):
+                journal_code = f"{name_prefix}{suffix}"
+                suffix += 1
+                    
+            journal = JournalObj.create({
+                'name': f"{employee.name} - Journal",
+                'code': journal_code,
+                'type': 'general',
+                'company_id': company_id,
+                'default_account_id': employee.asset_account_id.id,
+            })
+            employee.journal_id = journal.id
+            _logger.info("Created journal for PEAS employee: %s", employee.name)

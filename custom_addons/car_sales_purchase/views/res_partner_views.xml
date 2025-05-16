@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- View res.partner tree -->
+    <record id="view_res_partner_tree" model="ir.ui.view">
+        <field name="name">view.res.partner.tree</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="car_brand" optional="show"/>
+                <field name="car_year" optional="show"/>
+                <field name="car_price" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- View res.partner kanban -->
+    <record id="view_res_partner_kanban" model="ir.ui.view">
+        <field name="name">view.res.partner.kanban</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.res_partner_kanban_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('oe_kanban_details')]" position="inside">
+                <div t-if="record.car_brand.raw_value">
+                    <strong>Car Brand:</strong>
+                    <field name="car_brand"/>
+                </div>
+                <div t-if="record.car_year.raw_value">
+                    <strong>Year:</strong>
+                    <field name="car_year"/>
+                </div>
+                <div t-if="record.car_price.raw_value">
+                    <strong>Price:</strong>
+                    <field name="car_price"/>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

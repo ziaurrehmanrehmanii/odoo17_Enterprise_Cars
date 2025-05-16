@@ -7,10 +7,12 @@
     'website': '',
     'category': '',
     'depends': ['base', 'web', 'hr','account','sale_management','crm','stock','hr_expense','hr_payroll','purchase'],
-    "data": [
-        "security/peas_employee_security.xml",
-        "views/hr_employee_views.xml"
-    ],
+"data": [
+    "security/ir.model.access.csv",
+    "security/peas_employee_security.xml",
+    "views/peas_employee_pay_advance_views.xml",  # THIS FIRST
+    "views/hr_employee_views.xml"                           # THEN THIS
+],
     'assets': {
               'web.assets_backend': [
                   'peas_employee/static/src/**/*'

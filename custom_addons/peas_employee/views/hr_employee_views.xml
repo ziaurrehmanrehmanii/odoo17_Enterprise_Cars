@@ -10,6 +10,7 @@
             <!-- Add is_peas_employee field at the very beginning -->
             <field name="coach_id" position="after">
                 <field name="is_peas_employee" invisible="0"/>
+                <button name="%(action_peas_employee_pay_advance)d" type="action" string="Pay Advance" class="oe_stat_button btn-primary" icon="fa-money" invisible="not is_peas_employee" context="{'default_employee_id': id}"/>
             </field>
 
             <!-- Make work_email required based on is_peas_employee -->
@@ -22,8 +23,9 @@
                 <field name="user_id" invisible="not is_peas_employee" readonly="1" create="0" edit="0"/>
                 <field name="vendor_id" readonly="1" create="0" edit="0" invisible="not is_peas_employee"/>
                 <field name="customer_id" readonly="1" create="0" edit="0" invisible="not is_peas_employee"/>
+                <field name="journal_id" readonly="1" create="0" edit="0" invisible="not is_peas_employee"/>
             </field>
-
+            <!-- Add Pay Advance button -->
         </field>
     </record>
 
