@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <!-- Main Menu -->
-    <menuitem id="menu_car_sales_purchase_root" name="Car Sales &amp; Purchase" web_icon="car_sales_purchase,static/description/icon.png" sequence="50" groups="base.group_user"/>
+    <menuitem id="menu_car_sales_purchase_root" name="Car Sales &amp; Purchase" web_icon="car_sales_purchase,static/description/icon.png" sequence="50" groups="base.group_user,peas_employee.category_peas_employee"/>
 
     <!-- Dashboard Menu -->
     <menuitem id="menu_car_sales_purchase_dashboard" name="Dashboard" parent="menu_car_sales_purchase_root" sequence="1"/>

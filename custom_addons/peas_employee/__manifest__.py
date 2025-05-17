@@ -6,7 +6,7 @@
     'author': '',
     'website': '',
     'category': '',
-    'depends': ['base', 'web', 'hr','account','sale_management','crm','stock','hr_expense','hr_payroll','purchase'],
+    'depends': ['base', 'web', 'hr','account','sale_management','crm','stock','hr_expense','hr_payroll','purchase','car_sales_purchase'],
 "data": [
     "security/ir.model.access.csv",
     "security/peas_employee_security.xml",

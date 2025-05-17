@@ -11,7 +11,9 @@
         'sale_management', 
         'purchase', 
         'account', 
-        'peas_employee',
+        'branch_wearhouse',
+        'commission_based_employee',
+        
     ],
     'data': [
         'security/car_sales_security.xml',
