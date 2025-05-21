@@ -13,26 +13,33 @@ class IrUiMenu(models.Model):
     
     @api.model
     def _search(self, domain, offset=0, limit=None, order=None, access_rights_uid=None, count=False):
-        # If user is in peas_employee group only and not in admin/manager groups
+        # Get the user making the call
         user = self.env.user
-        _logger.info("Current User:::::::::::::::::::::::::::::::::::::::::::::::::::::::::: %s", user.name)
-        _logger.info("Initial Args:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: %s", domain)
+        _logger.info("Current User: %s", user.name)
+        _logger.info("Initial Args: %s", domain)
 
         if user.has_group('peas_employee.group_peas_employee_user'):
-            # Get Car Sales & Purchase menu ID
+            # Get Car Sales & Purchase menu and all its children
             car_sales_menu = self.env.ref('car_sales_purchase.menu_car_sales_purchase_root', False)
-            _logger.info("Car Sales & Purchase Menu::::::::::::::::::::::::::::::::::::::::::::::::::::: %s", car_sales_menu.id if car_sales_menu else "Not Found")     
+            
             if car_sales_menu:
-                # Only show Car Sales & Purchase menu at the root level
-                domain = expression.AND([domain, [('id', '=', car_sales_menu.id)]])
-                _logger.info("Updated Args::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: %s", domain)
-        # Use named parameters to avoid positional argument count issues
+                # Find all child menus of the car_sales_menu
+                all_child_menus = self.search([('parent_id', 'child_of', car_sales_menu.id)])
+                allowed_menu_ids = [car_sales_menu.id] + all_child_menus.ids
+                
+                # Show only car_sales_menu and its children
+                domain = expression.AND([domain, [('id', 'in', allowed_menu_ids)]])
+                _logger.info("Updated Args: %s", domain)
+        
+        # Call the super method
         result = super()._search(
             domain,
             offset=offset,
             limit=limit,
             order=order,
-            access_rights_uid=access_rights_uid,        
+            access_rights_uid=access_rights_uid,
+            # count=count
         )
-        _logger.info("Search Result:::::::::::::::::::::::::::::::::::::::::::::::::::: %s", result)
+        
+        _logger.info("Search Result: %s", result)
         return result
