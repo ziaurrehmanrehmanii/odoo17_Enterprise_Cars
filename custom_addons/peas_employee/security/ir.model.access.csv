@@ -1,2 +1,10 @@
 id,name,model_id/id,group_id/id,perm_read,perm_write,perm_create,perm_unlink
 access_peas_employee_pay_advance,peas_employee_pay_advance,model_peas_employee_pay_advance,base.group_user,1,1,1,1
+access_account_move_peas_employee,account.move peas employee,account.model_account_move,peas_employee.group_peas_employee_user,1,1,1,0
+access_account_move_line_peas_employee,account.move.line peas employee,account.model_account_move_line,peas_employee.group_peas_employee_user,1,1,1,0
+access_account_journal_peas_employee,account.journal peas employee,account.model_account_journal,peas_employee.group_peas_employee_user,1,1,1,0
+access_account_account_peas_employee,account.account peas employee,account.model_account_account,peas_employee.group_peas_employee_user,1,1,1,0
+access_account_tax_peas_employee,account.tax peas employee,account.model_account_tax,peas_employee.group_peas_employee_user,1,0,0,0
+access_account_tax_group_peas_employee,account.tax.group peas employee,account.model_account_tax_group,peas_employee.group_peas_employee_user,1,0,0,0
+access_car_offer_peas_employee,car.offer peas employee,car_sales_purchase.model_car_offer,peas_employee.group_peas_employee_user,1,1,1,0
+access_car_details_peas_employee,car.details peas employee,car_sales_purchase.model_car_details,peas_employee.group_peas_employee_user,1,1,1,0

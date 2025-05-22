@@ -10,6 +10,7 @@
 "data": [
     "security/ir.model.access.csv",
     "security/peas_employee_security.xml",
+    "security/ir_rule.xml",  # Added this line
     "views/peas_employee_pay_advance_views.xml",  # THIS FIRST
     "views/hr_employee_views.xml"                           # THEN THIS
 ],
