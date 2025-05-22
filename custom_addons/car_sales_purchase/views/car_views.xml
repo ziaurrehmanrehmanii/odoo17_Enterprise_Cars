@@ -6,8 +6,8 @@
         <field name="model">car.details</field>
         <field name="arch" type="xml">
             <tree string="Cars" decoration-info="state in ('draft','negotiation')" decoration-success="state == 'done'" decoration-warning="state in ('offer_accepted', 'invoiced')" decoration-danger="state == 'cancelled'">
-                <field name="transaction_type" optional="show"/>
-                <field name="connection_name"/>
+                <field name="transaction_type" optional="show" readonly="1"/>
+                <field name="connection_name" readonly="1"/>
                 <field name="make"/>
                 <field name="model"/>
                 <field name="year"/>
@@ -16,7 +16,7 @@
                 <field name="asking_price"/>
                 <field name="final_price" optional="show"/>
                 <field name="state"/>
-                <field name="user_id" widget="many2one_avatar_user" optional="show"/>
+                <field name="user_id" widget="many2one_avatar_user" optional="show" readonly="1"/>
             </tree>
         </field>
     </record>
@@ -62,10 +62,10 @@
                         </group>
                         <group string="Transaction Details">
                             <field name="transaction_type"/>
-                            <field name="connection_id" options="{'no_create': True}"/>
-                            <field name="user_id" widget="many2one_avatar_user"/>
+                            <field name="connection_id" />
+                            <field name="user_id" widget="many2one_avatar_user" readonly="1"/>
                             <field name="company_id" invisible="1"/>
-                            <field name="currency_id" options="{'no_create': True}" groups="base.group_multi_currency"/>
+                            <field name="currency_id" options="{'no_create': True}" readonly="1" groups="base.group_multi_currency"/>
                             <field name="asking_price"/>
                             <field name="expected_price"/>
                             <field name="final_price" readonly="1"/>
@@ -113,7 +113,7 @@
                 <field name="final_price"/>
                 <field name="state"/>
                 <field name="transaction_type"/>
-                <field name="connection_name"/>
+                <field name="connection_name" readonly="1"/>
                 <templates>
                     <t t-name="kanban-box">
                         <div t-attf-class="oe_kanban_global_click">
@@ -136,7 +136,7 @@
                                 </div>
                                 <div>
                                     <strong>Connection: </strong>
-                                    <field name="connection_name"/>
+                                    <field name="connection_name" readonly="1"/>
                                 </div>
                                 <div class="mt-2">
                                     <strong>Asking: </strong>
@@ -175,8 +175,8 @@
                 <field name="model"/>
                 <field name="year"/>
                 <field name="vin"/>
-                <field name="connection_id"/>
-                <field name="user_id"/>
+                <field name="connection_id" readonly="1"/>
+                <field name="user_id" readonly="1"/>
                 <separator/>
                 <filter string="Buy" name="buy" domain="[('transaction_type', '=', 'buy')]"/>
                 <filter string="Sell" name="sell" domain="[('transaction_type', '=', 'sell')]"/>

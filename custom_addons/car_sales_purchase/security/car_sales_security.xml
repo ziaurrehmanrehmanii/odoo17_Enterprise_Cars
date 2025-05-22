@@ -39,7 +39,7 @@
         <record id="rule_car_connection_manager" model="ir.rule">
             <field name="name">Car Connection: Manager can see all records</field>
             <field name="model_id" ref="model_car_connection"/>
-            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="domain_force">[('user_id', '=', user.id)]</field>
             <field name="groups" eval="[(4, ref('group_car_sales_purchase_manager'))]"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
