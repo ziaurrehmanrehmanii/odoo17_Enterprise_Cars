@@ -205,11 +205,10 @@ class HrEmployee(models.Model):
             'login': self.work_email,  # Set login to work_email
             'email': self.work_email,
             'partner_id': self.address_id.id if self.address_id else False,
-            'password': 'admin@321',  # Set a default password   
+            'password': 'admin@321',  # Set a default password       
         }
         
         user = self.env['res.users'].sudo().create(user_vals)
-        
         self.user_id = user
         return user
     

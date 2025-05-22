@@ -6,7 +6,7 @@
     'author': '',
     'website': '',
     'category': '',
-    'depends': ['base', 'web','peas_employee','car_sales_purchase'],
+    'depends': ['base', 'web','peas_employee','car_sales_purchase','branch_wearhouse','commission_based_employee'],
     "data": [
         "views/cars_menue_views.xml"
     ],

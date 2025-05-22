@@ -19,8 +19,8 @@ class PeasEmployeePayAdvance(models.TransientModel):
     journal_id = fields.Many2one('account.journal', string='Journal', required=True, readonly=True)
     amount = fields.Monetary(string='Amount', required=True)
     currency_id = fields.Many2one('res.currency', string='Currency',
-                                 default=lambda self: self.env.company.currency_id, readonly=True)
-    payment_date = fields.Date(string='Payment Date', required=True, default=fields.Date.context_today, readonly=True)
+                                 default=lambda self: self.env.company.currency_id)
+    payment_date = fields.Date(string='Payment Date', required=True, default=fields.Date.context_today)
     memo = fields.Char(string='Memo', help="Internal note for the payment")
 
     @api.model

@@ -35,6 +35,10 @@ so use the console to see the logs.
 the odoo server is running in the terminal.
 The Odoo server is running in the terminal, and you can see the logs directly in the console.
 the server is not run as a service.
+when running the server, make sure you activate the virtual environment.
+The virtual environment is located at `/home/odoo/odoo/venv`.
+when ever restarting the server, make sure the changes you made to the file are saved. and acept the changes.
+The Odoo server is not running as a service, so you need to start it manually.
 
 
 

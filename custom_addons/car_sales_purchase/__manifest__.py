@@ -11,9 +11,7 @@
         'sale_management', 
         'purchase', 
         'account', 
-        'branch_wearhouse',
-        'commission_based_employee',
-        
+        'peas_employee',
     ],
     'data': [
         'security/car_sales_security.xml',
@@ -26,6 +24,6 @@
     ],
     'application': True,
     'installable': True,
-    'auto_install': False,
+    'auto_install': True,
     'license': 'LGPL-3',
 }
