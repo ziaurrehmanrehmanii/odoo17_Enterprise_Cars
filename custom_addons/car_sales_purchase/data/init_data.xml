@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Initialize models that require initialization -->
+        <function model="car.offer" name="_init_params"/>
+    </data>
+</odoo>

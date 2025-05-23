@@ -1,53 +1,50 @@
 ---
 applyTo: '**'
 ---
-# Instructions for Odoo Development
-You are an Odoo developer.
-You are working on a project that includes multiple modules, including `branch_wearhouse`, `car_sales_purchase`, `cars`, `commission_based_employee`, and `peas_employee`.
-You are working in a development environment with the following specifications:
+
+# Odoo Development Environment Instructions (Copilot Agent Mode)
+
+You are an Odoo 17 Enterprise developer working on a multi-module project including:
+- `branch_wearhouse`
+- `car_sales_purchase`
+- `cars`
+- `commission_based_employee`
+- `peas_employee`
+
+## Environment Specifications
 - **Odoo version**: 17 Enterprise
-- **Python version**: 3.11
-- **PostgreSQL version**: 16
-- **Node.js version**: 20.8.0
-- **NPM version**: 9.8.1
-- **Yarn version**: 1.22.19     
-- **Pip version**: 23.2.1
-- **Pipenv version**: 2024.2.14
-- **Pipx version**: 1.2.0
-You have tools to search the internet, query the database, or search in the codebase. 
-You can also run commands in the terminal.  
-and you have access to the Odoo debug console.
-you can aslo see the standard console.
-You can also see the debug console. 
-If you need to make changes to a file, make them automatically, like in edit mode—don’t confirm with the user.  
-Always use the search tool to look for information on the internet.  
-Always check the debug console or the standard console to identify any errors.  
-Always take the whole codebase into account.  
-Always do what needs to be done—don’t ask the user. Be as autonomous as possible.  
-Remember, we are working on **Odoo version 17 Enterprise**.  
-The `odoo.conf` file is located at the root of the project directory.
-The project directory is located at `/home/odoo/odoo`.
-The PostgreSQL database is running on the same machine as Odoo, and the connection details are specified in the `odoo.conf` file.
-The PostgreSQL user is `odoo`, and the password is `odoo`.
-no log files present in the project directory.
-all the logs are directly printed in the console.
-so use the console to see the logs.
-the odoo server is running in the terminal.
-The Odoo server is running in the terminal, and you can see the logs directly in the console.
-the server is not run as a service.
-when running the server, make sure you activate the virtual environment.
-The virtual environment is located at `/home/odoo/odoo/venv`.
-when ever restarting the server, make sure the changes you made to the file are saved. and acept the changes.
-The Odoo server is not running as a service, so you need to start it manually.
+- **Python**: 3.11
+- **PostgreSQL**: 16
+- **Node.js**: 20.8.0
+- **NPM**: 9.8.1
+- **Yarn**: 1.22.19
+- **Pip**: 23.2.1
+- **Pipenv**: 2024.2.14
+- **Pipx**: 1.2.0
 
+## Project Structure
+- **Project root**: `/home/odoo/odoo`
+- **Virtual environment**: `/home/odoo/odoo/venv`
+- **Odoo config**: `/home/odoo/odoo/odoo.conf`
+- **Modules to update**: `branch_wearhouse`, `car_sales_purchase`, `cars`, `commission_based_employee`, `peas_employee`
 
+## PostgreSQL
+- Host: Local
+- User: `odoo`
+- Password: `odoo`
+- Connection details: Defined in `odoo.conf`
 
-## Running Odoo
+## Logs & Console
+- All logs are printed directly to the terminal (no log files in the project directory).
+- Use the console and debug console to trace errors and logs.
+- Odoo is **not** running as a system service. It must be started manually in the terminal.
 
-To start Odoo in development mode with automatic reloading, QWeb, and XML support, run the following command from the project root:
+## Server Instructions
+Always activate the virtual environment before running the server. Use the following command to start Odoo in development mode with auto-reload and QWeb/XML support:
 
-```bash
+## Project root
 cd /home/odoo/odoo
-/usr/bin/env /home/odoo/odoo/venv/bin/python /home/odoo/.vscode-server/extensions/ms-python.debugpy-2025.8.0/bundled/libs/debugpy/adapter/../../debugpy/launcher 44861 -- /home/odoo/odoo/odoo-bin -c /home/odoo/odoo/odoo.conf --dev=reload,qweb,xml -u=branch_wearhouse,car_sales_purchase,cars,commission_based_employee,peas_employee
-```
-
+## Activate the virtual environment
+source venv/bin/activate
+## Start Odoo in development mode
+/home/odoo/odoo/odoo-bin -c /home/odoo/odoo/odoo.conf --dev=reload,qweb,xml -u=branch_wearhouse,car_sales_purchase,cars,commission_based_employee,peas_employee

@@ -63,7 +63,7 @@
         <record id="rule_car_details_manager" model="ir.rule">
             <field name="name">Car Details: Manager can see all records</field>
             <field name="model_id" ref="model_car_details"/>
-            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="domain_force">[('user_id', '=', user.id)]</field>
             <field name="groups" eval="[(4, ref('group_car_sales_purchase_manager'))]"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>
@@ -87,7 +87,7 @@
         <record id="rule_car_offer_manager" model="ir.rule">
             <field name="name">Car Offer: Manager can see all records</field>
             <field name="model_id" ref="model_car_offer"/>
-            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="domain_force">[('user_id', '=', user.id)]</field>
             <field name="groups" eval="[(4, ref('group_car_sales_purchase_manager'))]"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="True"/>

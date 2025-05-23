@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from odoo import api, fields, models, _
+from odoo.exceptions import UserError
 
 class CarDetails(models.Model):
     _name = 'car.details'
@@ -69,6 +70,7 @@ class CarDetails(models.Model):
     
     offer_ids = fields.One2many('car.offer', 'car_id', string='Offers')
     offer_count = fields.Integer(compute='_compute_offer_count', string='Offers')
+    accepted_offer_id = fields.Many2one('car.offer', string='Accepted Offer', compute='_compute_accepted_offer', store=True)
     invoice_id = fields.Many2one('account.move', string='Invoice', copy=False)
     
     @api.depends('offer_ids')
@@ -76,6 +78,12 @@ class CarDetails(models.Model):
         for car in self:
             car.offer_count = len(car.offer_ids)
     
+    @api.depends('offer_ids.state')
+    def _compute_accepted_offer(self):
+        for car in self:
+            accepted_offer = car.offer_ids.filtered(lambda o: o.state == 'accepted')
+            car.accepted_offer_id = accepted_offer[0] if accepted_offer else False
+
     def action_view_offers(self):
         self.ensure_one()
         return {
@@ -89,6 +97,12 @@ class CarDetails(models.Model):
     
     def action_create_offer(self):
         self.ensure_one()
+        # Try to find a PEAS employee for the current user
+        peas_employee = self.env['hr.employee'].search([
+            ('user_id', '=', self.env.user.id),
+            ('is_peas_employee', '=', True)
+        ], limit=1)
+        
         return {
             'name': _('Create Offer'),
             'type': 'ir.actions.act_window',
@@ -98,6 +112,7 @@ class CarDetails(models.Model):
                 'default_car_id': self.id,
                 'default_transaction_type': self.transaction_type,
                 'default_currency_id': self.currency_id.id,
+                'default_employee_id': peas_employee.id if peas_employee else False,
             },
             'target': 'new',
         }
@@ -107,3 +122,20 @@ class CarDetails(models.Model):
     
     def action_cancel(self):
         self.write({'state': 'cancelled'})
+
+    def action_view_offer_invoice(self):
+        """View invoice from the accepted offer"""
+        self.ensure_one()
+        if self.accepted_offer_id and self.accepted_offer_id.invoice_id:
+            return self.accepted_offer_id.action_view_invoice()
+        elif self.invoice_id:
+            return {
+                'name': _('Invoice'),
+                'type': 'ir.actions.act_window',
+                'res_model': 'account.move',
+                'view_mode': 'form',
+                'res_id': self.invoice_id.id,
+                'target': 'current',
+            }
+        else:
+            raise UserError(_('No invoice found for this car.'))

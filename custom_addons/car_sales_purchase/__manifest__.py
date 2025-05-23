@@ -12,10 +12,13 @@
         'purchase', 
         'account', 
         'peas_employee',
+        'crm',
     ],
     'data': [
         'security/car_sales_security.xml',
         'security/ir.model.access.csv',
+        'data/crm_data.xml',
+        'data/init_data.xml',
         'views/connection_views.xml',
         'views/car_views.xml',
         'views/offer_views.xml',
@@ -26,4 +29,5 @@
     'installable': True,
     'auto_install': True,
     'license': 'LGPL-3',
+    'post_init_hook': 'post_init_hook',
 }

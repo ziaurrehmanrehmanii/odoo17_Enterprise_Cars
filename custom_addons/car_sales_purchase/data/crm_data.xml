@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Initialize CRM PLS fields parameter if not set -->
+    <record id="init_crm_pls_fields" model="ir.config_parameter">
+        <field name="key">crm.pls_fields</field>
+        <field name="value">phone_state,email_state,source_id,tag_ids</field>
+    </record>
+</odoo>

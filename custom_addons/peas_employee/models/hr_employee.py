@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import logging
+import random
 
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError, ValidationError
@@ -287,7 +288,10 @@ class HrEmployee(models.Model):
             if existing_receivables:
                 try:
                     last_code = int(existing_receivables[0].code)
-                    receivable_code = str(last_code + 1)
+                    
+                    receivable_code = str(random.randint(100000, 999999))
+                    # receivable_code = str(last_code + 1)
+                    # receivable_code = str(last_code + 1)
                 except ValueError:
                     pass
                     

@@ -12,7 +12,9 @@
                 <field name="connection_id"/>
                 <field name="date"/>
                 <field name="price"/>
+                <field name="employee_id" optional="show"/>
                 <field name="state"/>
+                <field name="invoice_id" optional="show"/>
                 <field name="user_id" widget="many2one_avatar_user"/>
             </tree>
         </field>
@@ -31,6 +33,12 @@
                     <field name="state" widget="statusbar" statusbar_visible="draft,sent,accepted,rejected"/>
                 </header>
                 <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_invoice" type="object" class="oe_stat_button" icon="fa-file-text-o" invisible="not invoice_id or state != 'accepted'">
+                            <field name="invoice_id" invisible="1"/>
+                            <span>View Invoice</span>
+                        </button>
+                    </div>
                     <div class="oe_title">
                         <h1>
                             <field name="name" readonly="1"/>
@@ -41,6 +49,7 @@
                             <field name="car_id" options="{'no_create': True}" readonly="context.get('default_car_id', False)"/>
                             <field name="transaction_type" readonly="1"/>
                             <field name="connection_id" readonly="1"/>
+                            <field name="employee_id" options="{'no_create': True}" domain="[('is_peas_employee', '=', True)]"/>
                             <field name="user_id" widget="many2one_avatar_user" readonly="1"/>
                         </group>
                         <group>
@@ -48,6 +57,7 @@
                             <field name="company_id" invisible="1"/>
                             <field name="currency_id" options="{'no_create': True}" readonly="1"/>
                             <field name="price"/>
+                            <field name="invoice_id" readonly="1" invisible="state != 'accepted'"/>
                         </group>
                     </group>
                     <notebook>
@@ -85,9 +95,13 @@
                 <filter string="Sent" name="sent" domain="[('state', '=', 'sent')]"/>
                 <filter string="Accepted" name="accepted" domain="[('state', '=', 'accepted')]"/>
                 <filter string="Rejected" name="rejected" domain="[('state', '=', 'rejected')]"/>
+                <separator/>
+                <filter string="With PEAS Employee" name="with_peas_employee" domain="[('employee_id', '!=', False)]"/>
+                <filter string="With Invoice" name="with_invoice" domain="[('invoice_id', '!=', False)]"/>
                 <group expand="0" string="Group By">
                     <filter string="Car" name="group_by_car" context="{'group_by': 'car_id'}"/>
                     <filter string="Connection" name="group_by_connection" context="{'group_by': 'connection_id'}"/>
+                    <filter string="PEAS Employee" name="group_by_employee" context="{'group_by': 'employee_id'}"/>
                     <filter string="Status" name="group_by_state" context="{'group_by': 'state'}"/>
                     <filter string="User" name="group_by_user" context="{'group_by': 'user_id'}"/>
                 </group>
